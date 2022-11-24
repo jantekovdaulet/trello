@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="layout/main">
+<body>
+<div layout:fragment="content">
+    <div>
+        <!-- Button trigger modal -->
+        <button th:text="'+ ' + #{button.new.folder}" type="button" class="btn btn-primary" data-bs-toggle="modal"
+                data-bs-target="#exampleModal">
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 th:text="#{label.add.new.folder}" class="modal-title fs-5" id="exampleModalLabel"></h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form th:action="@{'/addfolder'}" method="post" th:object="${newFolder}">
+                            <label th:text="#{label.folder.name} + ':'" for="exampleInputEmail1" class="form-label"></label>
+                            <input th:placeholder="#{placeholder.folder.name}" type="text" class="form-control"
+                                   th:field="*{name}"
+                                   id="exampleInputEmail1" aria-describedby="emailHelp" name="folderName">
+                            <br>
+                            <div class="modal-footer">
+                                <button th:text="#{button.close}" type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal"></button>
+                                <button th:text="#{button.add.folder}" type="submit" class="btn btn-success"></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div>
+        <div class="card" th:each="folder : ${folders}" style="margin-top: 10px; margin-bottom: 20px">
+            <div class="card-header">
+            </div>
+            <div class="card-body">
+                <h5 th:text="${folder.name}" class="card-title"></h5>
+                <a th:href="@{'/details/' + ${folder.id}}" class="btn btn-primary" th:text="#{button.details}" style="margin-top: 15px"></a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="layout/main">
+<body>
+<div layout:fragment="content">
+    <form th:action="@{'/savecategory'}" method="post" class="d-flex" role="search">
+        <div class="modal-body">
+            <input type="hidden" name="categoryId" th:value="${cat.id}">
+            <label th:text="#{label.category.name}" for="categoryName1" class="form-label"></label>
+            <br>
+            <input type="text" th:value="${cat.name}" th:placeholder="#{label.category.name}" name="categoryName"
+                   id="categoryName1" class="form-control me-2">
+            <br>
+            <br>
+            <button type="submit" class="btn btn-success" th:text="#{label.save}"></button>
+        </div>
+    </form>
+
+    <br>
+    <form th:action="@{'/deletecategory'}" method="post">
+        <input type="hidden" name="categoryId" th:value="${cat.id}">
+        <button type="submit" class="btn btn-danger" th:text="#{label.delete}"></button>
+    </form>
+</div>
+</body>
+</html>

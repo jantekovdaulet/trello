@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="layout/main">
+<body>
+<div layout:fragment="content">
+    <div class="modal-body">
+        <form th:action="@{'/savetask'}" method="post">
+            <label th:text="#{label.title} + ':'" for="title" class="form-label"></label>
+            <br>
+            <input type="hidden" th:value="${task.id}" name="taskId">
+            <input th:if="${task.status!=3}"
+                   type="text" th:placeholder="#{placeholder.title}" name="title" id="title"
+                   style="width: 100%;" th:value="${task.title}">
+            <input th:unless="${task.status!=3}" readonly
+                   type="text" th:placeholder="#{placeholder.title}" name="title" id="title"
+                   style="width: 100%;" th:value="${task.title}">
+            <br>
+            <br>
+            <label th:text="#{label.description} + ':'" class="form-label" for="desc" th:value="${task.title}"></label>
+            <br>
+            <textarea th:if="${task.status!=3}"
+                      th:placeholder="#{placeholder.description}" name="description" id="desc"
+                      th:text="${task.description}"
+                      style="width: 100%; height: 100px"></textarea>
+            <textarea th:unless="${task.status!=3}" readonly
+                      th:placeholder="#{placeholder.description}" name="description" id="desc"
+                      th:text="${task.description}"
+                      style="width: 100%; height: 100px"></textarea>
+            <br>
+            <br>
+            <label th:text="#{label.status} + ':'" class="form-label" for="desc"></label>
+            <br>
+            <select th:if="${task.status!=3}" class="form-select" name="status">
+                <option th:if="${task.status == 0}" selected style="font-weight: bold;" th:value="0" th:text="#{status.to.do}"></option>
+                <option th:unless="${task.status == 0}" style="font-weight: bold;" th:value="0" th:text="#{status.to.do}"></option>
+                <option th:if="${task.status == 1}" selected style="font-weight: bold;" th:value="1" th:text="#{status.in.test}"></option>
+                <option th:unless="${task.status == 1}" style="font-weight: bold;" th:value="1" th:text="#{status.in.test}">IN TEST</option>
+                <option th:if="${task.status == 2}" selected style="font-weight: bold;" th:value="2" th:text="#{status.done}"></option>
+                <option th:unless="${task.status == 2}" style="font-weight: bold;" th:value="2" th:text="#{status.done}"></option>
+                <option th:unless="${task.status == 3}" style="font-weight: bold;" th:value="3" th:text="#{status.failed}"></option>
+            </select>
+            <select th:unless="${task.status!=3}" disabled class="form-select" name="status">
+                <option style="font-weight: bold;" th:value="3" th:text="#{status.failed}">FAILED</option>
+            </select>
+            <br>
+            <button th:if="${task.status!=3}" type="submit" class="btn btn-success" th:text="#{label.save}"></button>
+        </form>
+    </div>
+    <br>
+    <div th:if="${task.status!=3}">
+        <form th:action="@{'/deletetask'}" method="post">
+            <input type="hidden" name="taskId" th:value="${task.id}">
+            <input type="hidden" name="folderId" th:value="${folder.id}">
+            <button type="submit" class="btn btn-danger" th:text="#{label.delete}"></button>
+        </form>
+        <br>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-secondary btn-sm"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal1" th:text="'+ ' + #{label.add.comment}">
+        </button>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel1" th:text="#{label.add.task}"></h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form th:action="@{'/addcomment'}" method="post">
+                            <input type="hidden" name="taskId" th:value="${task.id}">
+                            <label class="form-label">Comment</label>
+                            <br>
+                            <textarea class="form-control" placeholder="Comment" name="textComment"></textarea>
+                            <br>
+                            <button type="submit" class="btn btn-success">ADD</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+        <h5 th:text="#{label.comments} + ':'"></h5>
+        <br>
+        <div class="card" th:each="com : ${comments}" style="margin-top: 10px; margin-bottom: 20px">
+            <div class="card-header">
+            </div>
+            <div class="card-body">
+                <div style="display: flex; justify-content: space-between">
+                    <h6 th:text="${com.comment}" class="card-title"></h6>
+                    <form th:action="@{'/deletecomment/' + ${com.id}}" method="post">
+                        <input type="hidden" name="taskId" th:value="${task.id}">
+                        <button type="submit" class="btn btn-danger btn-sm" style="border-radius: 100%">x</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="layout/main">
+<body>
+<div layout:fragment="content">
+    <div>
+        <!-- Button trigger modal -->
+        <button th:text="'+ ' + #{button.add.category}" type="button" class="btn btn-secondary btn-sm"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal1">
+        </button>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel1" th:text="#{button.add.category} + ':'"></h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form th:action="@{'/addcategory'}" method="post">
+                            <label th:text="#{label.category.name}" for="categoryName" class="form-label"></label>
+                            <br>
+                            <input type="text" th:placeholder="#{label.category.name}" name="categoryName"
+                                   id="categoryName" style="width: 100%;">
+                            <br>
+                            <div class="modal-footer">
+                                <button th:text="#{button.close}" type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal"></button>
+                                <button th:text="#{button.add}" type="submit" class="btn btn-success"></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col" th:text="#{label.category.name}"></th>
+                <th scope="col" th:text="#{label.edit}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="cat : ${taskCategories}">
+                <th th:text="${cat.id}" scope="row" style="width: 10%"></th>
+                <td th:text="${cat.name}"></td>
+                <td style="width: 10%">
+                    <a th:href="@{'/editcategory/' + ${cat.id}}" class="btn btn-primary" th:text="#{label.edit}"></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
